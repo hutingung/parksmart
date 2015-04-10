@@ -1,0 +1,53 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:cxf="http://camel.apache.org/schema/cxf"
+	xmlns:p="http://www.springframework.org/schema/p" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:jaxrs="http://cxf.apache.org/jaxrs"
+	xsi:schemaLocation="
+       http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://camel.apache.org/schema/cxf http://camel.apache.org/schema/cxf/camel-cxf.xsd
+       http://cxf.apache.org/jaxrs http://cxf.apache.org/schemas/jaxrs.xsd
+       http://camel.apache.org/schema/spring http://camel.apache.org/schema/spring/camel-spring.xsd
+       http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+    ">
+
+	<cxf:rsServer id="parkmanagementRsServer" address="/parkmanagement"
+		serviceClass="my.com.fourmi.parkthat.parkmanagement.interfaces.ParkManagementRestApi"
+		loggingFeatureEnabled="true" loggingSizeLimit="20">
+		<cxf:providers>
+			<bean id="jsonProvider" class="com.fasterxml.jackson.jaxrs.json.JacksonJsonProvider" />
+		</cxf:providers>
+	</cxf:rsServer>
+
+	<camelContext id="parkmanagementServiceRoute" xmlns="http://camel.apache.org/schema/spring">
+		<!-- List of REST Api -->
+		<route>
+			<from
+				uri="cxfrs://bean://parkmanagementRsServer?bindingStyle=SimpleConsumer" />
+			<!-- We can remove this configure as the CXFRS producer is using the HttpAPI 
+				by default -->
+			<setHeader headerName="CamelCxfRsUsingHttpAPI">
+				<constant>True</constant>
+			</setHeader>
+			<recipientList>
+				<simple>direct:parkmanagement.${header.operationName}</simple>
+			</recipientList>
+			<removeHeaders pattern="*" />
+		</route>
+		<route>
+			<from uri="direct://parkmanagement.client_register" />
+			<to uri="bean:clientFacadeImpl?method=register" />
+		</route>
+		<route>
+			<from uri="direct://parkmanagement.client_activate" />
+			<to uri="bean:clientFacadeImpl?method=activate" />
+		</route>
+		<route>
+			<from uri="direct://parkmanagement.parkcar_park" />
+			<to uri="bean:parkCarFacadeImpl?method=park" />
+		</route>
+		<route>
+			<from uri="direct://parkmanagement.parkcar_unpark" />
+			<to uri="bean:parkCarFacadeImpl?method=unpark" />
+		</route>
+	</camelContext>
+</beans>
