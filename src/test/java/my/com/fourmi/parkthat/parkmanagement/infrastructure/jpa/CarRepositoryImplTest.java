@@ -1,6 +1,6 @@
 package my.com.fourmi.parkthat.parkmanagement.infrastructure.jpa;
 
-import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 import java.util.List;
 
@@ -23,8 +23,8 @@ public class CarRepositoryImplTest extends
         newCar.park(null);
         this.repository.save(newCar);
         String plateNo = "2600";
-        List<Car> car = repository.searchParkedCarByPlateNo(plateNo);
-        assertNotNull(car);
+        List<Car> cars = repository.searchParkedCarByPlateNo(plateNo);
+        assertTrue(cars.size() > 0);
     }
 
 }

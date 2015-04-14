@@ -36,9 +36,14 @@ public class Car extends AbstractPersistable<Long> {
     public void unpark() {
         this.status = ParkingStatus.FREE;
     }
-    
+
     public String getPlateNo() {
         return this.plateNo;
+    }
+
+    @Override
+    public String toString() {
+        return "Car [plateNo=" + plateNo + ", status=" + status + "]";
     }
 
 }

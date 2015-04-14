@@ -11,12 +11,17 @@ import my.com.fourmi.parkthat.parkmanagement.domain.model.ClientRepository;
 import my.com.fourmi.parkthat.parkmanagement.domain.model.ParkCarTransaction;
 import my.com.fourmi.parkthat.parkmanagement.domain.model.ParkCarTransactionRepository;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service("parkCarServiceImpl")
 public class ParkCarServiceImpl implements ParkCarService {
+
+    private static final Logger logger = LoggerFactory
+            .getLogger(ParkCarServiceImpl.class);
 
     private ClientRepository clientRepository;
 
@@ -65,7 +70,9 @@ public class ParkCarServiceImpl implements ParkCarService {
     }
 
     public List<Car> searchParkedCar(String plateNo) {
-        return this.carRepository.searchParkedCarByPlateNo(plateNo);
+        List<Car> result = this.carRepository.searchParkedCarByPlateNo(plateNo);
+        logger.debug("result={}", result);
+        return result;
     }
 
     @Autowired
