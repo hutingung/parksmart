@@ -49,5 +49,9 @@
 			<from uri="direct://parkmanagement.parkcar_unpark" />
 			<to uri="bean:parkCarFacadeImpl?method=unpark" />
 		</route>
+        <route>
+            <from uri="direct://parkmanagement.parkcar_searchParkedCar" />
+            <to uri="bean:parkCarFacadeImpl?method=searchParkedCar" />
+        </route>
 	</camelContext>
 </beans>

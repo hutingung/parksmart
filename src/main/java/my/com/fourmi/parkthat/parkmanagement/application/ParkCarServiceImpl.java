@@ -1,5 +1,7 @@
 package my.com.fourmi.parkthat.parkmanagement.application;
 
+import java.util.List;
+
 import my.com.fourmi.parkthat.parkmanagement.domain.model.Car;
 import my.com.fourmi.parkthat.parkmanagement.domain.model.CarPark;
 import my.com.fourmi.parkthat.parkmanagement.domain.model.CarParkRepository;
@@ -28,12 +30,12 @@ public class ParkCarServiceImpl implements ParkCarService {
     public ParkCarTransaction park(ParkCarCommand command) {
         Client client = this.clientRepository.findByPhoneNumber(command
                 .getPhoneNo());
-        if(client == null) {
+        if (client == null) {
             throw new RuntimeException("Client not registered");
         }
         if (client.isValidToken(command.getToken())) {
             Car car = this.carRepository.findByPlateNo(command.getPlateNo());
-            if(car == null) {
+            if (car == null) {
                 car = new Car(command.getPlateNo());
             }
             this.carRepository.save(car);
@@ -60,6 +62,10 @@ public class ParkCarServiceImpl implements ParkCarService {
         } else {
             throw new RuntimeException("Invalid token");
         }
+    }
+
+    public List<Car> searchParkedCar(String plateNo) {
+        return this.carRepository.searchParkedCarByPlateNo(plateNo);
     }
 
     @Autowired

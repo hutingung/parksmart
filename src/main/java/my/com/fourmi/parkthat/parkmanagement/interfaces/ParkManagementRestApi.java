@@ -40,4 +40,13 @@ public class ParkManagementRestApi {
     public UnparkCarResponseDTO parkcar_unpark(UnparkCarRequestDTO request) {
         return null;
     }
+
+    @POST
+    @Path("/parkcar/searchParkedCar")
+    @Consumes("application/json")
+    @Produces("application/json")
+    public SearchParkedCarResponseDTO parkcar_searchParkedCar(
+            SearchParkedCarRequestDTO request) {
+        return null;
+    }
 }

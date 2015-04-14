@@ -1,5 +1,8 @@
 package my.com.fourmi.parkthat.parkmanagement.domain.model;
 
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+
 import org.springframework.beans.factory.annotation.Configurable;
 import org.springframework.data.jpa.domain.AbstractPersistable;
 
@@ -14,10 +17,11 @@ public class Car extends AbstractPersistable<Long> {
 
     private String plateNo;
 
+    @Enumerated(EnumType.STRING)
     private ParkingStatus status;
-    
+
     public Car() {
-        
+
     }
 
     public Car(String plateNo) {
@@ -31,6 +35,10 @@ public class Car extends AbstractPersistable<Long> {
 
     public void unpark() {
         this.status = ParkingStatus.FREE;
+    }
+    
+    public String getPlateNo() {
+        return this.plateNo;
     }
 
 }

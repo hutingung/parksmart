@@ -1,8 +1,11 @@
 package my.com.fourmi.parkthat.parkmanagement.interfaces;
 
+import java.util.List;
+
 import my.com.fourmi.parkthat.parkmanagement.application.ParkCarCommand;
 import my.com.fourmi.parkthat.parkmanagement.application.ParkCarService;
 import my.com.fourmi.parkthat.parkmanagement.application.UnparkCarCommand;
+import my.com.fourmi.parkthat.parkmanagement.domain.model.Car;
 import my.com.fourmi.parkthat.parkmanagement.domain.model.ParkCarTransaction;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,9 +37,20 @@ public class ParkCarFacadeImpl implements ParkCarFacade {
         ParkCarTransaction parkCarTransaction = this.parkCarService
                 .unpark(command);
         UnparkCarResponseDTO response = new UnparkCarResponseDTO(
-                parkCarTransaction.getId(), parkCarTransaction.getDuration(), true, "success",
-                parkCarTransaction.getCharges(),
+                parkCarTransaction.getId(), parkCarTransaction.getDuration(),
+                true, "success", parkCarTransaction.getCharges(),
                 parkCarTransaction.getClientLatestBalance());
+        return response;
+    }
+
+    public SearchParkedCarResponseDTO searchParkedCar(
+            SearchParkedCarRequestDTO request) {
+        List<Car> cars = this.parkCarService.searchParkedCar(request
+                .getPlateNo());
+        SearchParkedCarResponseDTO response = new SearchParkedCarResponseDTO();
+        for (Car car : cars) {
+            response.getPlateNos().add(car.getPlateNo());
+        }
         return response;
     }
 
